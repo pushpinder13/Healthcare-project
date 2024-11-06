@@ -1,14 +1,56 @@
+{{!--
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Page</title>
+    <title>Home</title>
 </head>
 
 <body>
-    <h1>This is Home Page, {{username}}</h1>
+
+    <h2>Welcome to the Home Page, {{username}}</h2>
+
+    <br>,
+    <div>
+        <form action="/profile" method="post" enctype="multipart/form-data">
+            <input type="file" name="avatar" />
+            <input type="submit" value="Upload" />
+        </form>
+    </div>
+</body>
+
+</html> --}}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{{title}}</title>
+</head>
+
+<body>
+    {{> header}}
+
+    <h1>{{message}}</h1>
+    <p>User Information:</p>
+    <ul>
+        <li>Name: {{username}}</li>
+    </ul>
+    <div>
+        <form action="/profile" method="post" enctype="multipart/form-data">
+            <input type="file" name="avatar">
+            <input type="submit" value="upload">
+        </form>
+        
+    </div>
+    {{#if imageUrl}}
+    <div>
+        <h2>Your Uploaded Image</h2>
+        <img src="{{imageUrl}}" alt="Uploaded Avatar" style="max-width: 200px;">
+    </div>
+    {{/if}}
 </body>
 
 </html>
