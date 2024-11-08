@@ -1,32 +1,10 @@
-{{!--
+{{!-- 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-</head>
-
-<body>
-
-    <h2>Welcome to the Home Page, {{username}}</h2>
-
-    <br>,
-    <div>
-        <form action="/profile" method="post" enctype="multipart/form-data">
-            <input type="file" name="avatar" />
-            <input type="submit" value="Upload" />
-        </form>
-    </div>
-</body>
-
-</html> --}}
-
-<!DOCTYPE html>
-<html>
-
-<head>
     <title>{{title}}</title>
 </head>
 
@@ -38,17 +16,71 @@
     <ul>
         <li>Name: {{username}}</li>
     </ul>
+
+    <!-- File upload form -->
     <div>
         <form action="/profile" method="post" enctype="multipart/form-data">
-            <input type="file" name="avatar">
-            <input type="submit" value="upload">
+            <input type="file" name="avatars" multiple> <!-- Allow multiple uploads -->
+            <input type="submit" value="Upload">
         </form>
-        
     </div>
-    {{#if imageUrl}}
+
+    <!-- Show uploaded images if they exist -->
+    {{#if imageUrls}}
     <div>
-        <h2>Your Uploaded Image</h2>
-        <img src="{{imageUrl}}" alt="Uploaded Avatar" style="max-width: 200px;">
+        <h2>Your Uploaded Images</h2>
+        <ul>
+            {{#each imageUrls}}
+            <li>
+                <a href="{{this.url}}" target="_blank">View Image {{@index}}</a>
+            </li>
+            {{/each}}
+        </ul>
+    </div>
+    {{/if}}
+</body>
+
+</html> --}}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+</head>
+
+<body>
+    {{> header}}
+
+    <h1>{{message}}</h1>
+    <p>User Information:</p>
+    <ul>
+        <li>Name: {{username}}</li>
+    </ul>
+
+    <!-- File upload form -->
+    <div>
+        <form action="/profile" method="post" enctype="multipart/form-data">
+            <input type="file" name="avatars" multiple> <!-- Allow multiple uploads -->
+            <input type="submit" value="Upload">
+        </form>
+    </div>
+
+    {{#if imageUrls}}
+    <div>
+        <h2>Your Uploaded Images</h2>
+        <ul>
+            {{#each imageUrls}}
+            <li>
+                <!-- Link to open the image -->
+                <a href="{{this}}" target="_blank">
+                    <!-- Show the image thumbnail -->
+                    <img src="{{this}}" alt="Uploaded Avatar" style="max-width: 200px;">
+                </a>
+            </li>
+            {{/each}}
+        </ul>
     </div>
     {{/if}}
 </body>
