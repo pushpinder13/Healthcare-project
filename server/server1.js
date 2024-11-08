@@ -155,7 +155,7 @@ const hbs = require("hbs");
 hbs.registerPartials(path.join(__dirname, "views/partials"));
 
 // Routes
-app.get("/home", (req, res) => {
+app.get("/", (req, res) => {
     const user = { name: "Pushpinder" };
     res.render("home", { username: user.name });
 });
@@ -169,9 +169,7 @@ app.get('/allusers', (req, res) => {
     res.render('users', { users });
 });
 
-app.get('/', (req, res) => {
-    res.send("Working");
-});
+
 
 // Handle multiple file uploads
 app.post("/profile", upload.array("avatars", 10), (req, res, next) => {
@@ -183,7 +181,7 @@ app.post("/profile", upload.array("avatars", 10), (req, res, next) => {
 
     res.render("home", {
         username: req.body.username || "Pushpinder Singh",
-        imageUrls: imageUrls, 
+        imageUrls: imageUrls,
     });
 });
 
