@@ -40,6 +40,7 @@ const bcrypt = require("bcrypt");
 const User = require("../models/userModels");
 require("dotenv").config();
 
+
 const registerUser = asyncHandler(async (req, res) => {
     const { name, email, password, phoneNumber } = req.body;
 
@@ -98,3 +99,48 @@ const loginUser = asyncHandler(async (req, res) => {
         },
     });
 });
+const getUserProfile = asyncHandler(async (req, res) => {
+    const { email } = req.body
+    const data = await User.findOne({ email });
+    try {
+        if (!data) {
+            return res.status(200).json({ data })
+        }
+    } catch {
+        return res.status(500).json({ message: err.message })
+    }
+})
+const updateUserProfile = asyncHandler(async (req, res) => {
+    const { email, name, phoneNumber, password } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+        return res.status(404).json({ message: "User not found" });
+    }
+
+    if (name) {
+        user.name = name;
+    }
+    if (phoneNumber) {
+        user.phoneNumber = phoneNumber;
+    }
+    if (password) {
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(password, salt);
+    }
+
+    const updatedUser = await user.save();
+
+    res.status(200).json({
+        message: "User updated successfully",
+        updatedUser: {
+            _id: updatedUser._id,
+            name: updatedUser.name,
+            email: updatedUser.email,
+            phoneNumber: updatedUser.phoneNumber,
+        },
+    });
+});
+
+module.exports = {registerUser, loginUser, getUserProfile, updateUserProfile}

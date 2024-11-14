@@ -188,9 +188,12 @@ app.post("/profile", upload.array("avatars", 10), (req, res, next) => {
 
 
 
+
 // Use routes
 app.use("/api/users", userRoutes);
 app.use("/api/doctors", doctorRoutes);
+
+
 
 // Start server
 app.listen(port, () => {
