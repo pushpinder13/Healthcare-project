@@ -105,7 +105,7 @@ const registerDoctor = asyncHandler(async (req, res) => {
     experience,
     address
   });
-
+  console.log("JWT_SECRET:", process.env.JWT_SECRET);
   // Generate JWT Token
   const token = generateJwtToken(newDoctor);
 
@@ -113,6 +113,39 @@ const registerDoctor = asyncHandler(async (req, res) => {
     message: "Doctor registered successfully",
     doctor: newDoctor,
     token  // Send the JWT token to the client
+  });
+});
+
+const loginDoctor = asyncHandler(async (req, res) => {
+  const { email, phoneNumber } = req.body;
+
+  if (!email || !phoneNumber) {
+    res.status(400);
+    throw new Error("Please provide email and phone number");
+  }
+
+  // Check if doctor exists
+  const doctor = await Doctor.findOne({ email });
+  if (!doctor || doctor.phoneNumber !== phoneNumber) {
+    res.status(401);
+    throw new Error("Invalid email or phone number");
+  }
+
+  // Generate JWT Token
+  const token = generateJwtToken(doctor);
+
+  res.status(200).json({
+    message: "Login successful",
+    doctor: {
+      id: doctor._id,
+      name: doctor.name,
+      email: doctor.email,
+      specialty: doctor.specialty,
+      phoneNumber: doctor.phoneNumber,
+      experience: doctor.experience,
+      address: doctor.address,
+    },
+    token,  // Send the JWT token to the client
   });
 });
 
@@ -133,4 +166,4 @@ const getDoctorById = asyncHandler(async (req, res) => {
   res.status(200).json(doctor);
 });
 
-module.exports = { registerDoctor, getAllDoctors, getDoctorById };
+module.exports = { registerDoctor, loginDoctor, getAllDoctors, getDoctorById };
